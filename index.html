@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Float &amp; Jab — Learn Boxing</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0b0b0b;--bone:#f1ede4;--coral:#ff5a3c;--sage:#c9d6b8;--peach:#f6c6a8;--lilac:#cfc7ec;--butter:#f2e6a0;--serif:'Instrument Serif',Georgia,serif;--sans:'Space Grotesk',system-ui,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px;background:var(--ink)}
+body{font-family:var(--sans);background:var(--ink);color:var(--bone);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--coral)}
+
+/* ---------- stick man ---------- */
+.fig{--g1u:-30deg;--g1f:-120deg;--g2u:-20deg;--g2f:-130deg;--p1u:var(--g1u);--p1f:var(--g1f);--p2u:var(--g2u);--p2f:var(--g2f);--t:1.6s;--t2:var(--t);--dl:0s;--glove:var(--coral);width:100%;height:100%;overflow:visible;display:block}
+.fig .body{animation:bob .8s ease-in-out infinite}
+.fig .lg,.fig .bd{transform-origin:100px 120px;transform-box:view-box}
+.fig .a{transform-origin:100px 72px;transform-box:view-box}
+.fig .f{transform-origin:100px 95px;transform-box:view-box}
+.a1{animation:u1 var(--t) ease-in-out infinite}.a1 .f{animation:f1 var(--t) ease-in-out infinite}
+.a2{animation:u2 var(--t2) var(--dl) ease-in-out infinite;opacity:.6}.a2 .f{animation:f2 var(--t2) var(--dl) ease-in-out infinite}
+@keyframes u1{0%,40%,100%{transform:rotate(var(--g1u))}10%,20%{transform:rotate(var(--p1u))}}
+@keyframes f1{0%,40%,100%{transform:rotate(var(--g1f))}10%,20%{transform:rotate(var(--p1f))}}
+@keyframes u2{0%,40%,100%{transform:rotate(var(--g2u))}10%,20%{transform:rotate(var(--p2u))}}
+@keyframes f2{0%,40%,100%{transform:rotate(var(--g2f))}10%,20%{transform:rotate(var(--p2f))}}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.jab{--p1u:-90deg;--p1f:0deg}
+.cross{--p2u:-90deg;--p2f:0deg}.cross .bd{animation:lean 1.6s ease-in-out infinite}
+.hook{--p1u:-100deg;--p1f:-70deg}.hook .bd{animation:lean 1.6s ease-in-out infinite}
+.upper{--g1u:-8deg;--g1f:-25deg;--p1u:-50deg;--p1f:-125deg}
+.slip .bd{animation:slip 1.6s ease-in-out infinite}
+.foot .body{animation:step 1.6s ease-in-out infinite}
+.foot .lr{animation:legA .8s ease-in-out infinite}.foot .lf{animation:legB .8s ease-in-out infinite}
+.combo{--t:.9s;--t2:1.8s;--dl:.45s;--p1u:-90deg;--p1f:0deg;--p2u:-90deg;--p2f:0deg}
+@keyframes lean{10%,22%{transform:rotate(9deg)}}
+@keyframes slip{15%,45%{transform:translate(-16px,6px) rotate(-14deg)}}
+@keyframes step{25%{transform:translateX(10px)}75%{transform:translateX(-10px)}}
+@keyframes legA{50%{transform:rotate(14deg)}}
+@keyframes legB{50%{transform:rotate(-14deg)}}
+
+/* ---------- loader ---------- */
+#loader{position:fixed;inset:0;z-index:100;display:grid;place-items:center;pointer-events:all}
+#loader .c{position:absolute;left:0;right:0;height:50%;background:var(--ink);transition:transform 1s cubic-bezier(.77,0,.18,1) .15s}
+#loader .c1{top:0}#loader .c2{bottom:0}
+#loader .in{position:relative;z-index:2;text-align:center;width:min(78vw,300px);transition:opacity .4s}
+#loader .fg{width:170px;height:170px;margin:0 auto 6px;color:var(--bone)}
+#loader .bar{height:2px;background:#ffffff22;overflow:hidden;margin:14px 0 10px}
+#loader .bar i{display:block;height:100%;width:0;background:var(--coral)}
+#loader small{display:flex;justify-content:space-between;letter-spacing:.2em;font-size:.7rem;text-transform:uppercase;opacity:.7}
+.done #loader .c1{transform:translateY(-101%)}.done #loader .c2{transform:translateY(101%)}
+.done #loader .in{opacity:0}.done #loader{pointer-events:none;visibility:hidden;transition:visibility 0s 1.3s}
+
+/* ---------- nav ---------- */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:calc(14px + env(safe-area-inset-top,0px)) 22px 14px;mix-blend-mode:difference;color:#fff}
+nav b{font-family:var(--serif);font-size:1.5rem;font-weight:400;letter-spacing:.01em}
+nav a{color:inherit;text-decoration:none;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;margin-left:18px}
+@media(max-width:560px){nav a.h{display:none}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100svh;display:grid;align-items:center;padding:96px 22px 56px;overflow:hidden;background:radial-gradient(circle at 70% 40%,#262626 0,var(--ink) 62%);filter:grayscale(0)}
+.hero .grid{position:relative;z-index:2;max-width:1100px;margin:auto;width:100%;display:grid;gap:28px;grid-template-columns:1fr;align-items:center}
+@media(min-width:860px){.hero .grid{grid-template-columns:1.1fr .9fr}}
+.bgbag{position:absolute;top:-10px;opacity:.1;color:#fff;transform-origin:50% 0;animation:swing 6s ease-in-out infinite;filter:grayscale(1)}
+.bgbag svg{display:block;width:100%;height:auto}
+.b1{left:-3%;width:150px;height:auto}.b2{left:42%;width:90px;animation-delay:-2s;opacity:.07}.b3{right:-2%;width:210px;animation-delay:-4s;opacity:.12}
+@keyframes swing{50%{transform:rotate(5deg)}0%,100%{transform:rotate(-5deg)}}
+.ghost{position:absolute;left:50%;bottom:-3vw;transform:translateX(-50%);font-family:var(--serif);font-size:30vw;line-height:.8;color:transparent;-webkit-text-stroke:1px #ffffff1a;white-space:nowrap;z-index:1;user-select:none}
+.tag{display:inline-block;border:1px solid #ffffff44;border-radius:99px;padding:6px 14px;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(3.4rem,13vw,8rem);line-height:.9;margin:18px 0 20px;letter-spacing:-.02em}
+.hero p{max-width:34ch;opacity:.75;line-height:1.6;font-size:1.02rem}
+.btns{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.btn{display:inline-block;padding:14px 26px;border-radius:99px;font-weight:500;text-decoration:none;font-size:.9rem;transition:transform .3s,background .3s,color .3s}
+.btn.p{background:var(--coral);color:var(--ink)}.btn.g{border:1px solid #ffffff55;color:var(--bone)}
+.btn:hover{transform:translateY(-3px)}
+.scene{position:relative;width:min(100%,360px);aspect-ratio:11/10;margin:0 auto;color:var(--bone)}
+.scene .fg{position:absolute;left:0;bottom:0;width:91%;height:91%}
+.scene .bag{position:absolute;left:68%;top:0;width:30%;height:100%;transform-origin:50% 0;animation:hit .9s ease-out infinite}
+.scene .floor{position:absolute;left:4%;right:4%;bottom:0;height:1px;background:#ffffff33}
+@keyframes hit{0%{transform:rotate(0)}12%{transform:rotate(-9deg)}32%{transform:rotate(4deg)}55%{transform:rotate(-1.5deg)}100%{transform:rotate(0)}}
+.rv-h{opacity:0;transform:translateY(40px);animation:up 1s cubic-bezier(.2,.8,.2,1) forwards;animation-play-state:paused}
+.go .rv-h{animation-play-state:running;animation-delay:calc(var(--i)*.12s + 1.1s)}
+@keyframes up{to{opacity:1;transform:none}}
+.scroll{position:absolute;bottom:18px;left:22px;z-index:3;font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;opacity:.6}
+
+/* ---------- marquee ---------- */
+.mq{background:var(--coral);color:var(--ink);overflow:hidden;white-space:nowrap;padding:14px 0;font-family:var(--serif);font-size:1.9rem;transform:rotate(-1.2deg);margin:-14px -10px 0;position:relative;z-index:5}
+.mq div{display:inline-block;animation:mq 22s linear infinite}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- techniques ---------- */
+.tech{background:var(--bone);color:var(--ink);padding:100px 22px 90px}
+.wrap{max-width:1100px;margin:auto}
+.tech h2,.cta h2{font-family:var(--serif);font-weight:400;font-size:clamp(2.4rem,8vw,5rem);line-height:.95;margin-bottom:14px}
+.tech .lead{max-width:48ch;opacity:.7;line-height:1.6;margin-bottom:44px}
+.cards{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:640px){.cards{grid-template-columns:1fr 1fr}}
+@media(min-width:960px){.cards{grid-template-columns:repeat(3,1fr)}}
+.card{border-radius:28px;padding:22px;background:var(--c);position:relative;overflow:hidden;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.card:hover{transform:translateY(-6px) rotate(-.6deg)}
+.card .n{font-size:.72rem;letter-spacing:.2em;opacity:.55}
+.card .fg{height:170px;color:var(--ink);margin:6px 0 4px}
+.card h3{font-family:var(--serif);font-weight:400;font-size:2.1rem;line-height:1}
+.card p{font-size:.93rem;line-height:1.55;opacity:.78;margin-top:8px}
+.card .pill{display:inline-block;margin-top:14px;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid #0b0b0b55;border-radius:99px;padding:5px 12px}
+.rv{opacity:0;transform:translateY(46px) scale(.97);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--i,0)*70ms)}
+.rv.in{opacity:1;transform:none}
+
+/* ---------- rhythm ---------- */
+.flow{padding:90px 22px;display:grid;gap:40px;max-width:1100px;margin:auto;grid-template-columns:1fr}
+@media(min-width:760px){.flow{grid-template-columns:repeat(3,1fr)}}
+.flow div{border-top:1px solid #ffffff33;padding-top:18px}
+.flow h4{font-family:var(--serif);font-weight:400;font-size:2.6rem}
+.flow h4 em{font-size:1rem;font-family:var(--sans);font-style:normal;letter-spacing:.2em;display:block;margin-bottom:6px}
+.flow p{opacity:.7;line-height:1.6;margin-top:8px}
+
+/* ---------- cta ---------- */
+.cta{background:var(--sage);color:var(--ink);text-align:center;padding:100px 22px;border-radius:40px 40px 0 0}
+.cta p{max-width:40ch;margin:0 auto 28px;line-height:1.6;opacity:.75}
+.cta .btn.p{background:var(--ink);color:var(--bone)}
+footer{background:var(--sage);color:var(--ink);text-align:center;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;padding:0 22px calc(30px + env(safe-area-inset-bottom,0px));opacity:.9}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01s!important;animation-iteration-count:1!important;transition-duration:.01s!important}}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="c c1"></div><div class="c c2"></div>
+  <div class="in"><div class="fg" id="lf"></div>
+    <div class="bar"><i id="lb"></i></div>
+    <small><span>Round 1 · Warming up</span><span id="ln">0%</span></small>
+  </div>
+</div>
+
+<nav><b>Float &amp; Jab</b><div><a class="h" href="#moves">Moves</a><a class="h" href="#flow">Rhythm</a><a href="#join">Join</a></div></nav>
+
+<header class="hero" id="top">
+  <div class="bgbag b1" id="bb1"></div><div class="bgbag b2" id="bb2"></div><div class="bgbag b3" id="bb3"></div>
+  <div class="ghost">BOX</div>
+  <div class="grid">
+    <div>
+      <span class="tag rv-h" style="--i:0">Boxing school · all levels</span>
+      <h1 class="rv-h" style="--i:1">Float.<br>Jab.<br><em>Breathe.</em></h1>
+      <p class="rv-h" style="--i:2">Learn the sweet science the calm way. Seven core techniques, one slow rhythm, and a stick man who never gets tired.</p>
+      <div class="btns rv-h" style="--i:3"><a class="btn p" href="#moves">See the moves</a><a class="btn g" href="#join">Book a free class</a></div>
+    </div>
+    <div class="scene rv-h" style="--i:2">
+      <div class="fg" id="hf"></div>
+      <svg class="bag" viewBox="0 0 100 300" id="hb"></svg>
+      <div class="floor"></div>
+    </div>
+  </div>
+  <div class="scroll">Scroll ↓</div>
+</header>
+
+<div class="mq"><div id="mq"></div></div>
+
+<section class="tech" id="moves">
+  <div class="wrap">
+    <h2 class="rv">Seven moves.<br><em>One flow.</em></h2>
+    <p class="lead rv">Every fighter starts here. Watch the stick man, then copy him slowly in the mirror.</p>
+    <div class="cards" id="cards"></div>
+  </div>
+</section>
+
+<section class="flow" id="flow">
+  <div class="rv"><h4><em>01</em>Relax</h4><p>Tight shoulders slow your hands. Breathe out on every punch and keep your grip soft until impact.</p></div>
+  <div class="rv" style="--i:2"><h4><em>02</em>Rhythm</h4><p>Bounce lightly on the balls of your feet. Fighters who move to a beat never get stuck flat-footed.</p></div>
+  <div class="rv" style="--i:4"><h4><em>03</em>Repeat</h4><p>Ten clean jabs beat a hundred sloppy ones. Slow, correct reps become fast, automatic ones.</p></div>
+</section>
+
+<section class="cta" id="join">
+  <h2 class="rv">Ready to <em>step in?</em></h2>
+  <p class="rv">Gloves provided. No experience needed. Your first class is free.</p>
+  <a class="btn p rv" href="#top">Book my first round</a>
+</section>
+<footer>© 2026 Float &amp; Jab</footer>
+
+<script>
+function fig(c){return '<svg class="fig '+c+'" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><g class="body"><g class="lg lr"><path d="M100 120L82 152L70 186"/></g><g class="lg lf"><path d="M100 120L124 150L132 186"/></g><g class="bd"><path d="M100 72V120"/><circle cx="102" cy="52" r="11"/><g class="a a2"><path d="M100 72v23"/><g class="f"><path d="M100 95v23"/><circle cx="100" cy="120" r="7" fill="currentColor" stroke="none"/></g></g><g class="a a1"><path d="M100 72v23"/><g class="f"><path d="M100 95v23"/><circle cx="100" cy="120" r="8" fill="var(--glove)" stroke="none"/></g></g></g></g></svg>'}
+var bag='<line x1="50" y1="0" x2="50" y2="78" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3"/><rect x="18" y="78" width="64" height="160" rx="24" fill="#161616" stroke="currentColor" stroke-width="3"/><path d="M18 118h64M18 198h64" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="78" r="4" fill="currentColor"/>';
+var bagBig='<svg viewBox="0 0 100 300" fill="#fff" stroke="currentColor"><line x1="50" y1="0" x2="50" y2="78" stroke-width="2"/><rect x="14" y="78" width="72" height="200" rx="28" stroke-width="3"/></svg>';
+var T=[
+['Stance','stance','--c:var(--sage)','The base of everything. Feet shoulder-width, lead foot forward, knees soft, chin down, hands up by your cheeks.','Foundation'],
+['Jab','jab','--c:var(--peach)','A quick straight punch with the lead hand. It measures distance, hides your next move and keeps the opponent honest.','Lead hand'],
+['Cross','cross','--c:var(--lilac)','The power punch. Drive from the back foot, rotate your hips and fire the rear hand straight down the middle.','Rear hand'],
+['Hook','hook','--c:var(--butter)','A curved punch to the side of the head. Pivot the lead foot, keep your elbow level and turn your whole body through it.','Power'],
+['Uppercut','upper','--c:var(--peach)','Dip your knees, then drive the fist up through the chin. A close-range weapon that punishes a lowered guard.','Close range'],
+['Slip','slip','--c:var(--sage)','Move your head just off the punch line by rotating your shoulders. Small, calm moves keep you set for a counter.','Defense'],
+['Footwork','foot','--c:var(--lilac)','Step, glide, pivot. Move off your lead foot first and never cross your feet. Good footwork wins fights before punches do.','Movement']
+];
+document.getElementById('lf').innerHTML=fig('combo');
+document.getElementById('hf').innerHTML=fig('combo');
+document.getElementById('hb').innerHTML=bag;
+['bb1','bb2','bb3'].forEach(function(i){document.getElementById(i).innerHTML=bagBig});
+document.getElementById('mq').innerHTML=Array(8).join('Jab ✦ Cross ✦ Hook ✦ Uppercut ✦ Slip ✦ Roll ✦ ');
+document.getElementById('cards').innerHTML=T.map(function(t,i){return '<article class="card rv" style="'+t[2]+';--i:'+(i%3)+'"><span class="n">0'+(i+1)+' / 07</span><div class="fg">'+fig(t[1])+'</div><h3>'+t[0]+'</h3><p>'+t[3]+'</p><span class="pill">'+t[4]+'</span></article>'}).join('');
+
+// loader
+var p=0,ln=document.getElementById('ln'),lb=document.getElementById('lb');
+var iv=setInterval(function(){p+=Math.random()*7+2;if(p>=100){p=100;clearInterval(iv);setTimeout(function(){document.body.classList.add('done','go')},350)}
+ln.textContent=Math.floor(p)+'%';lb.style.width=p+'%'},110);
+
+// scroll reveal
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});
+document.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+</script>
+</body>
+</html>
